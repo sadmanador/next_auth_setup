@@ -8,3 +8,8 @@ npm i next-auth
 /app/api/auth/[...nextauth]/route.ts
 
 
+# provide the NextAuth & providers from credentials
+
+## make a login button in the component
+
+##
