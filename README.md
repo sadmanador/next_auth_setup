@@ -12,4 +12,12 @@ npm i next-auth
 
 ## make a login button in the component
 
-##
+## console.log the credential from api route
+
+## make provider in the src
+
+## wrap the layout with the session provider
+
+## make an user info component and make it client site
+
+## show the userInfo comp into home
