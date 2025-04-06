@@ -1,30 +1,62 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import axios from "axios";
 
 export const authOptions = {
   providers: [
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        username: { label: "Username", type: "text", placeholder: "jsmith" },
+        email: { label: "Email", type: "email", placeholder: "email..." },
         password: { label: "Password", type: "password" },
-        email: { label: "Email", type: "email" },
       },
-      async authorize(credentials) {
-        console.log(credentials);
+      async authorize(credentials, req) {
+        console.log("Credentials:", credentials);
 
-        const user = { id: "1", name: "J Smith", email: "jsmith@example.com" };
+        if (!credentials?.email || !credentials?.password) {
+          return null;
+        }
 
-        if (user) {
-          return user;
-        } else {
+        try {
+          const res = await axios.post(
+            `${process.env.NEXT_PUBLIC_API_URL}/api/login`,
+            {
+              email: credentials.email,
+              password: credentials.password,
+            }
+          );
+
+          console.log(res);
+
+          if (res.status === 200 && res.data.user) {
+            return res.data.user;
+          } else {
+            return null;
+          }
+        } catch (error) {
+          console.error("Error in authorize:", error);
           return null;
         }
       },
     }),
   ],
-  pages: {
-    error: "/api/auth/error",
+  callbacks: {
+    async session({ session }) {
+      return session;
+    },
+    async jwt({ token, user }) {
+      if (user) {
+        token.username = user.username;
+        token.role = user.role;
+      }
+      return token;
+    },
+    async redirect({ url, baseUrl }) {
+      if (url === "/api/auth/signout") {
+        return "/";
+      }
+      return baseUrl ;
+    },
   },
 };
 

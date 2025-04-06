@@ -1,6 +1,6 @@
 
 import "./globals.css";
-import NextAuthSessionProvider from "./Providers/NextjsAuthSessionProvider";
+import NextAuthSessionProvider from "../Providers/NextjsAuthSessionProvider";
 
 
 
