@@ -1,7 +1,7 @@
 import NextAuth from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials"; 
+import CredentialsProvider from "next-auth/providers/credentials";
 
-const handler = NextAuth({
+export const authOptions = {
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -10,8 +10,8 @@ const handler = NextAuth({
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        console.log(credentials)
-     
+        console.log(credentials);
+
         const user = { id: "1", name: "J Smith", email: "jsmith@example.com" };
 
         if (user) {
@@ -23,8 +23,10 @@ const handler = NextAuth({
     }),
   ],
   pages: {
-    error: '/api/auth/error',
+    error: "/api/auth/error",
   },
-});
+};
+
+const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };
